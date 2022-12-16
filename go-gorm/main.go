@@ -39,6 +39,8 @@ func main() {
 	http.HandleFunc("/", index(db))
 	http.HandleFunc("/2", second(sqlDB))
 
+	log.Print("Starting server at 8080")
+
 	err = http.ListenAndServe(":8080", nil)
 	if err != nil {
 		panic(err)
