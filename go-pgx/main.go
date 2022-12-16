@@ -38,21 +38,25 @@ func main() {
 	}
 }
 
+func writeError(w http.ResponseWriter, err error) {
+	log.Println(err)
+	w.WriteHeader(http.StatusInternalServerError)
+	w.Write([]byte("Internal Server Error"))
+}
+
 func index(db *pgxpool.Pool) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		var words []Word
+
 		rows, err := db.Query(
 			context.Background(),
 			"SELECT id, title, content FROM words LIMIT 100",
 		)
 		if err != nil {
-			log.Println(err)
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte("Internal Server Error"))
+			writeError(w, err)
 			return
 		}
 		defer rows.Close()
-
-		var words []Word
 
 		for rows.Next() {
 			var word Word
@@ -63,17 +67,13 @@ func index(db *pgxpool.Pool) http.HandlerFunc {
 			words = append(words, word)
 		}
 		if err != nil {
-			log.Println(err)
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte("Internal Server Error"))
+			writeError(w, err)
 			return
 		}
 
 		bytes, err := json.Marshal(words)
 		if err != nil {
-			log.Println(err)
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte("Internal Server Error"))
+			writeError(w, err)
 			return
 		}
 
