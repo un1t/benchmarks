@@ -30,6 +30,8 @@ func main() {
 	defer dbpool.Close()
 
 	http.HandleFunc("/", index(dbpool))
+	http.HandleFunc("/ping", ping)
+
 	err = http.ListenAndServe(":8080", nil)
 	if err != nil {
 		panic(err)
@@ -77,4 +79,8 @@ func index(db *pgxpool.Pool) http.HandlerFunc {
 
 		w.Write(bytes)
 	})
+}
+
+func ping(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("OK"))
 }
