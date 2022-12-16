@@ -1,8 +1,8 @@
-use actix_web::{get, web, App, HttpRequest, HttpResponse, HttpServer, Responder};
+use actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
 use serde::Serialize;
-use deadpool_postgres::{Config, Manager, ManagerConfig, Pool, RecyclingMethod, Runtime};
-use tokio_postgres::{NoTls, types::ToSql};
-use url::{Url, ParseError};
+use deadpool_postgres::{Config, ManagerConfig, Pool, RecyclingMethod, Runtime};
+use tokio_postgres::{NoTls};
+use url::{Url};
 
 
 #[derive(Debug, Serialize)]

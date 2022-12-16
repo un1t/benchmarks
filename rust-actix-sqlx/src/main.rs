@@ -1,4 +1,4 @@
-use actix_web::{get, web, App, HttpRequest, HttpResponse, HttpServer, Responder};
+use actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
 use sqlx::postgres::{PgPoolOptions};
 use sqlx::{postgres::PgPool};
 use serde::Serialize;
