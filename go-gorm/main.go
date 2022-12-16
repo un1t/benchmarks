@@ -1,14 +1,15 @@
 package main
 
 import (
-	"context"
 	"encoding/json"
 	"log"
 	"net/http"
 	"os"
 
-	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/joho/godotenv"
+
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 type Word struct {
@@ -22,44 +23,30 @@ func main() {
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
-
-	dbpool, err := pgxpool.New(context.Background(), os.Getenv("DATABASE_URL"))
+	databaseUrl := os.Getenv("DATABASE_URL")
+	db, err := gorm.Open(postgres.Open(databaseUrl), &gorm.Config{})
 	if err != nil {
 		panic(err)
 	}
-	defer dbpool.Close()
+	sqlDB, err := db.DB()
+	if err != nil {
+		panic(err)
+	}
+	sqlDB.SetMaxIdleConns(10)
+	sqlDB.SetMaxOpenConns(10)
 
-	http.HandleFunc("/", index(dbpool))
-	err = http.ListenAndServe(":8080", nil)
+	http.HandleFunc("/", index(db))
+	http.ListenAndServe(":8080", nil)
 	if err != nil {
 		panic(err)
 	}
 }
 
-func index(db *pgxpool.Pool) http.HandlerFunc {
+func index(db *gorm.DB) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		rows, err := db.Query(
-			context.Background(),
-			"SELECT id, title, content FROM words LIMIT 100",
-		)
-		if err != nil {
-			log.Println(err)
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte("Internal Server Error"))
-			return
-		}
-		defer rows.Close()
-
 		var words []Word
 
-		for rows.Next() {
-			var word Word
-			err = rows.Scan(&word.Id, &word.Title, &word.Content)
-			if err != nil {
-				break
-			}
-			words = append(words, word)
-		}
+		err := db.Limit(100).Find(&words).Error
 		if err != nil {
 			log.Println(err)
 			w.WriteHeader(http.StatusInternalServerError)
