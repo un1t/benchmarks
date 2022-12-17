@@ -2,19 +2,23 @@ const os = require("os");
 const cluster = require("cluster");
 const fastify = require('fastify')({ logger: true, disableRequestLogging: true })
 const pg = require('pg')
+var parse = require('pg-connection-string').parse;
+require('dotenv').config()
+
+const dbConfig = parse(process.env.DATABASE_URL)
 
 const pgPool = new pg.Pool({
-  host: 'localhost',
-  user: 'postgres',
-  database: "rsdict_dev",
-  max: 1,
+    host: dbConfig.host,
+    user: dbConfig.user,
+    database: dbConfig.database,
+    max: 1,
 })
 
 const clusterWorkerSize = os.cpus().length;
 
-fastify.get('/', async (request, reply) => {    
-    const res = await pgPool.query('SELECT id, title, content from words limit 100')
-    return res.rows
+fastify.get('/', async (request, reply) => {
+    const { rows } = await pgPool.query('SELECT id, title, content from words limit 100')
+    return rows
 })
 
 fastify.get('/ping', async (request, reply) => {
