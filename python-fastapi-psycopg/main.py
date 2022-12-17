@@ -9,13 +9,6 @@ load_dotenv()
 db_pool = AsyncConnectionPool(os.getenv("DATABASE_URL"), min_size=0, max_size=3)
 
 
-@dataclass
-class Word:
-    id: int
-    title: str
-    content: str
-
-
 @app.get("/")
 async def index():
     words = []
@@ -26,7 +19,7 @@ async def index():
             rows = await cur.fetchall()
 
     for row in rows:
-        word = Word(id=row[0], title=row[1], content=row[2])
+        word = {"id": row[0], "title": row[1], "content": row[2]}
         words.append(word)
 
     return words
