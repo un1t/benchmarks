@@ -1,0 +1,7 @@
+django
+psycopg2
+dj-database-url
+python-dotenv
+black
+uvicorn[standard]
+
