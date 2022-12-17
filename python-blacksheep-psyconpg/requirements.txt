@@ -1,0 +1,6 @@
+blacksheep
+uvicorn[standard]
+psycopg
+psycopg_pool
+python-dotenv
+black
