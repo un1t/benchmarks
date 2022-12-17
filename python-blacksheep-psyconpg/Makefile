@@ -7,10 +7,10 @@ install:
 	make freeze
 
 freeze:
-	pip freeze > freeze.txt
+	./venv/bin/pip freeze > freeze.txt
 
 dev:
-	uvicorn main:app --reload
+	./venv/bin/uvicorn main:app --reload
 
 run:
-	uvicorn main:app --workers `nproc` --log-level error
+	./venv/bin/uvicorn main:app --workers `nproc` --log-level error
