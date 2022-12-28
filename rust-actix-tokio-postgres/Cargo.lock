@@ -119,20 +119,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "actix-tokio-postgres"
-version = "0.1.0"
-dependencies = [
- "actix-web",
- "deadpool-postgres",
- "dotenv",
- "dotenvy",
- "serde",
- "serde_json",
- "tokio-postgres",
- "url",
-]
-
-[[package]]
 name = "actix-utils"
 version = "3.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1017,6 +1003,20 @@ dependencies = [
  "itoa",
  "ryu",
  "serde",
+]
+
+[[package]]
+name = "server"
+version = "0.1.0"
+dependencies = [
+ "actix-web",
+ "deadpool-postgres",
+ "dotenv",
+ "dotenvy",
+ "serde",
+ "serde_json",
+ "tokio-postgres",
+ "url",
 ]
 
 [[package]]
