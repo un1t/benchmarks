@@ -119,18 +119,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "actix-sql"
-version = "0.1.0"
-dependencies = [
- "actix-web",
- "dotenv",
- "dotenvy",
- "serde",
- "serde_json",
- "sqlx",
-]
-
-[[package]]
 name = "actix-utils"
 version = "3.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1271,6 +1259,18 @@ dependencies = [
  "itoa",
  "ryu",
  "serde",
+]
+
+[[package]]
+name = "server"
+version = "0.1.0"
+dependencies = [
+ "actix-web",
+ "dotenv",
+ "dotenvy",
+ "serde",
+ "serde_json",
+ "sqlx",
 ]
 
 [[package]]
