@@ -23,7 +23,13 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
-	dbpool, err := pgxpool.New(context.Background(), os.Getenv("DATABASE_URL"))
+	conf, err := pgxpool.ParseConfig(os.Getenv("DATABASE_URL"))
+	if err != nil {
+		panic(err)
+	}
+	conf.MaxConns = 10
+
+	dbpool, err := pgxpool.NewWithConfig(context.Background(), conf)
 	if err != nil {
 		panic(err)
 	}
