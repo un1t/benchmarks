@@ -1,8 +1,9 @@
+use std::str::FromStr;
+
 use actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
 use serde::Serialize;
-use deadpool_postgres::{ManagerConfig, Manager, Pool, RecyclingMethod, Runtime};
+use deadpool_postgres::{ManagerConfig, Manager, Pool, RecyclingMethod};
 use tokio_postgres::{NoTls, Config};
-use url::{Url};
 
 
 #[derive(Debug, Serialize)]
@@ -46,12 +47,7 @@ async fn main() -> std::io::Result<()> {
     let database_url = std::env::var("DATABASE_URL")
         .expect("DATABASE_URL must be set");
 
-    let parsed_url = Url::parse(&database_url).unwrap();
-
-    let mut pg_config = Config::new();
-    pg_config.user(parsed_url.username());
-    pg_config.host(&parsed_url.host().unwrap().to_string());
-    pg_config.dbname(&parsed_url.path()[1..]);
+    let pg_config = Config::from_str(&database_url).unwrap();
 
     let mgr_config = ManagerConfig {
         recycling_method: RecyclingMethod::Fast
