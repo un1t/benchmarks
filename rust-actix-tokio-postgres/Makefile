@@ -4,8 +4,8 @@ build:
 dev:
 	cargo watch -x check -x run
 
-run: build
-	./target/release/server
+run:
+	cargo watch -x check -x "run --release"
 
 db:
 	psql -U postgres -h localhost rsdict_dev
