@@ -12,3 +12,4 @@ dotenv="0.15.0"
 actix-web = "4.2"
 sqlx = { version = "0.6", features = [ "runtime-actix-native-tls" , "postgres" ] }
 dotenvy ="0.15.6"
+env_logger="0.10.0"

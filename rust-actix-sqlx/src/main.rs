@@ -1,4 +1,4 @@
-use actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
+use actix_web::{get, web, App, HttpResponse, HttpServer, Responder, middleware::Logger};
 use sqlx::postgres::{PgPoolOptions};
 use sqlx::{postgres::PgPool};
 use serde::Serialize;
@@ -27,6 +27,8 @@ async fn main() -> std::io::Result<()> {
     let database_url = std::env::var("DATABASE_URL")
         .expect("DATABASE_URL must be set");
 
+    env_logger::init_from_env(env_logger::Env::new().default_filter_or("error"));
+
     println!("Starting server at 8080");
 
     let pool = PgPoolOptions::new()
@@ -36,6 +38,7 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new()
             .app_data(web::Data::new(pool.clone()))
+            .wrap(Logger::new("%a %{User-Agent}i"))
             .service(index)
     })
     .bind(("127.0.0.1", 8080))?
