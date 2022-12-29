@@ -1,6 +1,6 @@
 use std::str::FromStr;
 
-use actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
+use actix_web::{get, web, App, HttpResponse, HttpServer, Responder, middleware::Logger};
 use serde::Serialize;
 use deadpool_postgres::{ManagerConfig, Manager, Pool, RecyclingMethod};
 use tokio_postgres::{NoTls, Config};
@@ -47,6 +47,8 @@ async fn main() -> std::io::Result<()> {
     let database_url = std::env::var("DATABASE_URL")
         .expect("DATABASE_URL must be set");
 
+    env_logger::init_from_env(env_logger::Env::new().default_filter_or("error"));
+
     let pg_config = Config::from_str(&database_url).unwrap();
 
     let mgr_config = ManagerConfig {
@@ -60,8 +62,10 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new()
             .app_data(web::Data::new(pool.clone()))
+            .wrap(Logger::new("%a %{User-Agent}i"))
             .service(index)
             .service(ping)
+
     })
     .bind(("127.0.0.1", 8080))?
     .run()
