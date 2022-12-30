@@ -33,7 +33,6 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	sqlDB.SetMaxIdleConns(10)
 	sqlDB.SetMaxOpenConns(10)
 
 	http.HandleFunc("/", index(db))
