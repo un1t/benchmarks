@@ -38,7 +38,7 @@ async fn index(pool: web::Data<Pool>) -> impl Responder {
 
 #[get("/ping")]
 async fn ping() -> impl Responder {
-    HttpResponse::Ok().json("OK")
+    HttpResponse::Ok().body("OK")
 }
 
 #[actix_web::main]
