@@ -28,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-g$$7=49mrs5)7r5^^h#l9$(v=p1k^(wh)%(7jw8d-f#7=h^i5e"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -79,10 +79,6 @@ WSGI_APPLICATION = "project.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-import dj_database_url
-import os
-from dotenv import load_dotenv
-load_dotenv()
 DATABASES = {
     "default": dj_database_url.parse(os.getenv("DATABASE_URL"))
 }

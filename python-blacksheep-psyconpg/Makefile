@@ -10,7 +10,7 @@ freeze:
 	./venv/bin/pip freeze > freeze.txt
 
 dev:
-	./venv/bin/uvicorn main:app --reload
+	./venv/bin/uvicorn main:app --port 8080 --reload
 
 run:
-	./venv/bin/uvicorn main:app --workers `nproc` --log-level error
+	./venv/bin/uvicorn main:app --port 8080 --workers `nproc` --log-level error

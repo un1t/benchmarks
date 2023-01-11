@@ -10,7 +10,8 @@ freeze:
 	./venv/bin/pip freeze > freeze.txt
 
 dev:
-	./venv/bin/uvicorn project.asgi:application --reload
+	./venv/bin/uvicorn project.asgi:application --port 8080 --reload
 
 run:
-	./venv/bin/uvicorn project.asgi:application --workers `nproc` --log-level error
+	./venv/bin/uvicorn project.asgi:application --port 8080 --workers `nproc` --log-level error
+
