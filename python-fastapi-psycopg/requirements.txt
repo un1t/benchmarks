@@ -1,6 +1,5 @@
 fastapi
-uvicorn[standard]
-psycopg
-psycopg_pool
 python-dotenv
+asyncpg
+uvicorn[standard]
 black
