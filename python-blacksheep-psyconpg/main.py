@@ -19,8 +19,7 @@ async def index():
     words = []
 
     async with app.pool.acquire() as conn:
-        async with conn.transaction():
-            rows = await conn.fetch("SELECT id, title, content from words limit 100")
+        rows = await conn.fetch("SELECT id, title, content from words limit 100")
 
     for row in rows:
         word = {"id": row[0], "title": row[1], "content": row[2]}
