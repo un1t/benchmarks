@@ -1,6 +1,5 @@
 sanic
 uvicorn[standard]
-psycopg
-psycopg_pool
+asyncpg
 python-dotenv
 black

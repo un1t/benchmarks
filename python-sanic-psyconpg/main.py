@@ -1,24 +1,25 @@
 import os
+import asyncpg
 from dataclasses import dataclass
 from dotenv import load_dotenv
-from psycopg_pool import AsyncConnectionPool
 from sanic import Sanic
 from sanic.response import text, json
 
 
 app = Sanic("MyApp")
 load_dotenv()
-db_pool = AsyncConnectionPool(os.getenv("DATABASE_URL"), min_size=0, max_size=3)
+
+@app.listener("before_server_start")
+async def before_server_start(app, loop):
+    app.ctx.pool = await asyncpg.create_pool(os.getenv("DATABASE_URL"), min_size=0, max_size=5)
 
 
 @app.get("/")
 async def index(request):
     words = []
 
-    async with db_pool.connection() as conn:
-        async with conn.cursor() as cur:
-            await cur.execute("SELECT id, title, content from words limit 100")
-            rows = await cur.fetchall()
+    async with app.ctx.pool.acquire() as conn:
+        rows = await conn.fetch("SELECT id, title, content from words limit 100")
 
     for row in rows:
         word = {"id": row[0], "title": row[1], "content": row[2]}
